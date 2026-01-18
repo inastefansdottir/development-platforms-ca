@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ESNext",
+    "module": "ESNext", // Keep ES Modules
     "moduleResolution": "Node",
-    "outDir": "dist",
-    "rootDir": "src",
+    "esModuleInterop": true, // allows `import express from "express"`
+    "forceConsistentCasingInFileNames": true,
     "strict": true,
-    "esModuleInterop": true
-  }
+    "skipLibCheck": true,
+    "outDir": "dist"
+  },
+  "include": ["src"]
 }
