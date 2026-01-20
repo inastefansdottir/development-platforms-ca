@@ -10,7 +10,7 @@ export type UserResponse = {
   email: string;
 };
 
-export type Articles = {
+export type Article = {
   id: number;
   title: string;
   body?: string;
@@ -19,6 +19,6 @@ export type Articles = {
   created_at: Date;
 };
 
-export type ArticleWithAuthor = Articles & {
+export type ArticlesWithAuthor = Article & {
   author_email: string;
 };

@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { Request, Response, NextFunction } from "express";
+import { verifyToken } from "../utils/jwt";
 
 const registerSchema = z.object({
   email: z.email("Email must be a valid email"),
@@ -45,5 +46,44 @@ export function validateLogin(req: Request, res: Response, next: NextFunction) {
     });
   }
 
+  next();
+}
+
+// JWT Authentication
+export function authenticationToken(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  const authHeader = req.headers.authorization;
+
+  // Check if authorization header exists
+  if (!authHeader) {
+    return res.status(401).json({
+      error: "Access token required",
+    });
+  }
+
+  // Check if header follows Bearer format
+  if (!authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({
+      error: "Token must be in format: Bearer <token>",
+    });
+  }
+
+  // Extract token from "Bearer <token>"
+  const token = authHeader.substring(7);
+
+  // Verify the token
+  const payload = verifyToken(token);
+
+  if (!payload) {
+    return res.status(403).json({
+      error: "Invalid or expired token",
+    });
+  }
+
+  // Add user info to request object
+  req.user = { id: payload.userId };
   next();
 }
